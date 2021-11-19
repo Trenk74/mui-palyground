@@ -13,8 +13,8 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { drowerItems } from './drowerItems';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { grey } from '@mui/material/colors';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -41,7 +41,7 @@ function Layout(props) {
 							button
 							key={item.text}
 							onClick={() => navigate(item.path)}
-							sx={{ backgroundColor: active ? grey[500] : null }}>
+							sx={{ backgroundColor: active ? 'primary.light' : null }}>
 							<ListItemIcon>{item.icon}</ListItemIcon>
 							<ListItemText primary={item.text} />
 						</ListItem>
@@ -120,7 +120,7 @@ function Layout(props) {
 					width: { sm: `calc(100% - ${drawerWidth}px)` },
 				}}>
 				<Toolbar />
-				{props.children}
+				<Outlet />
 			</Box>
 		</Box>
 	);

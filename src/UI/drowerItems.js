@@ -12,41 +12,41 @@ export const drowerItems = [
 	{
 		text: 'Garaža',
 		icon: <Home />,
-		path: '/garage',
+		path: '/app/garage',
 	},
 	{
 		text: 'Vozila',
 		icon: <DirectionsCar />,
-		path: '/vehicle',
+		path: '/app/vehicle',
 	},
 	{
 		text: 'Servisne intervencije',
 		icon: <CarRepair />,
-		path: '/repairs',
+		path: '/app/repairs',
 	},
 	{
 		text: 'Troškovi',
 		icon: <CreditCard />,
-		path: '/expenses',
+		path: '/app/expenses',
 	},
 	{
 		text: 'Gorivo',
 		icon: <LocalGasStation />,
-		path: '/fuel',
+		path: '/app/fuel',
 	},
 	{
 		text: 'Kilometraža',
 		icon: <Home />,
-		path: '/mileage',
+		path: '/app/mileage',
 	},
 	{
 		text: 'Vozači',
 		icon: <Group />,
-		path: '/drivers',
+		path: '/app/drivers',
 	},
 	{
 		text: 'Servisi',
 		icon: <Build />,
-		path: '/services',
+		path: '/app/services',
 	},
 ];
