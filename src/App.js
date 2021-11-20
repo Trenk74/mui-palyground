@@ -1,12 +1,14 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Layout from './UI/Layout';
+import Layout from './components/UI/Layout';
 import Garage from './pages/Garage';
 import Vehicle from './pages/Vehicle';
+import SignIn from './pages/SignIn';
 
 function App() {
 	return (
 		<Routes>
-			<Route path='/' element={<Navigate replace to='/app/garage' />} />
+			<Route path='/' element={<Navigate replace to='/login' />} />
+			<Route path='/login' element={<SignIn />} />
 			<Route path='app' element={<Layout />}>
 				<Route path='garage' element={<Garage />} />
 				<Route path='vehicle' element={<Vehicle />} />

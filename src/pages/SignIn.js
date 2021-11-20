@@ -14,19 +14,51 @@ import {
 	Container,
 } from '@mui/material';
 import { Link as RLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Copyright from '../components/common/Copyright';
+import { useDispatch, useSelector } from 'react-redux';
+import { authSelector, authActions, login } from './../store/authSlice';
+import { useEffect, useRef } from 'react';
 
-import Copyright from '../common/Copyright';
+import { useNavigate } from 'react-router-dom';
 
 export default function SignIn() {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+
+	const { isFetching, isSuccess, isError, errorMessage } =
+		useSelector(authSelector);
+
+	const emailRef = useRef();
+	const passRef = useRef();
+
 	const handleSubmit = event => {
 		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		// eslint-disable-next-line no-console
-		console.log({
-			email: data.get('email'),
-			password: data.get('password'),
-		});
+		const data = {
+			username: emailRef.current.value,
+			password: passRef.current.value,
+			returnSecureToken: true,
+		};
+		dispatch(login(data));
 	};
+
+	useEffect(() => {
+		return () => {
+			dispatch(authActions.clearState());
+		};
+	}, []);
+
+	useEffect(() => {
+		if (isError) {
+			toast.error(errorMessage);
+			dispatch(authActions.clearState);
+		}
+		if (isSuccess) {
+			dispatch(authActions.clearState());
+			navigate('/app/garage');
+		}
+	}, [isError, isSuccess]);
 
 	return (
 		<Container component='main' maxWidth='xs'>
@@ -58,6 +90,7 @@ export default function SignIn() {
 						name='email'
 						autoComplete='email'
 						autoFocus
+						inputRef={emailRef}
 					/>
 					<TextField
 						margin='normal'
@@ -68,6 +101,7 @@ export default function SignIn() {
 						type='password'
 						id='password'
 						autoComplete='current-password'
+						inputRef={passRef}
 					/>
 					<FormControlLabel
 						control={<Checkbox value='remember' color='primary' />}
