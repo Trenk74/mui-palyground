@@ -1,6 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { loginApi } from '../api/myCarApi';
 
+const initState = {
+	email: '',
+	token: '',
+	firstName: '',
+	expiresIn: '',
+	isFetching: false,
+	isSuccess: false,
+	isError: false,
+	isLoggedIn: false,
+	errorMessage: '',
+};
+
 export const login = createAsyncThunk(
 	'auth/login',
 	async ({ username, password, returnSecureToken }, thunkAPI) => {
@@ -18,12 +30,15 @@ export const login = createAsyncThunk(
 				}),
 			});
 			let data = await response.json();
+			console.log(response);
 			console.log('response:', data);
+			console.log(data.accessToken);
 			if (response.status === 200) {
-				localStorage.setItem('token', data.idToken);
+				localStorage.setItem('token', data.accessToken);
 				let dateTime = (Date.now() + 3600000).toString();
 				console.log(dateTime);
 				localStorage.setItem('tokenExpiration', dateTime);
+				sessionStorage.setItem('isLoggedIn', true);
 				return data;
 			} else {
 				return thunkAPI.rejectWithValue(data);
@@ -37,33 +52,20 @@ export const login = createAsyncThunk(
 
 const authSlice = createSlice({
 	name: 'auth',
-	initialState: {
-		email: '',
-		token: '',
-		firstName: '',
-		expiresIn: '',
-		isFetching: false,
-		isSuccess: false,
-		isError: false,
-		isLoggedIn: false,
-		errorMessage: '',
-	},
+	initialState: initState,
 	reducers: {
-		clearState: state => {
+		clearState: (state, action) => {
 			state.isError = false;
 			state.isSuccess = false;
 			state.isFetching = false;
 			state.errorMessage = null;
-
 			return state;
 		},
 		logout: state => {
+			return initState;
+		},
+		lg: state => {
 			state.isLoggedIn = false;
-			state.isError = false;
-			state.isSuccess = false;
-			state.isFetching = false;
-			state.errorMessage = null;
-
 			return state;
 		},
 	},
@@ -78,7 +80,6 @@ const authSlice = createSlice({
 			state.isSuccess = true;
 			state.isLoggedIn = true;
 			state.errorMessage = null;
-			return state;
 		},
 		[login.rejected]: (state, { payload }) => {
 			state.isFetching = false;

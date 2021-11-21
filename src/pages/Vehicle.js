@@ -1,8 +1,12 @@
 import React from 'react';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 function Vehicle() {
-	return <Typography>Vehicle</Typography>;
+	return (
+		<Box>
+			<Typography>Vehicle</Typography>
+		</Box>
+	);
 }
 
 export default Vehicle;

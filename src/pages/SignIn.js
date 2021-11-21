@@ -52,7 +52,7 @@ export default function SignIn() {
 	useEffect(() => {
 		if (isError) {
 			toast.error(errorMessage);
-			dispatch(authActions.clearState);
+			dispatch(authActions.clearState());
 		}
 		if (isSuccess) {
 			dispatch(authActions.clearState());

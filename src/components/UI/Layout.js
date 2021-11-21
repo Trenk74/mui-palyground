@@ -1,7 +1,8 @@
-import * as React from 'react';
+import { useState } from 'react';
 import {
 	AppBar,
 	Box,
+	Button,
 	CssBaseline,
 	Divider,
 	Drawer,
@@ -19,18 +20,28 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 import { drowerItems } from './drowerItems';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Outlet } from 'react-router-dom';
+import { authActions } from '../../store/authSlice';
+import { useDispatch } from 'react-redux';
 
 const drawerWidth = 240;
 
 function Layout(props) {
 	const { window } = props;
-	const [mobileOpen, setMobileOpen] = React.useState(false);
+	const [mobileOpen, setMobileOpen] = useState(false);
+
+	const dispatch = useDispatch();
 
 	const navigate = useNavigate();
 	const location = useLocation();
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
+	};
+
+	const logoutHandler = () => {
+		dispatch(authActions.logout());
+		sessionStorage.clear();
+		navigate('/');
 	};
 
 	const drawer = (
@@ -76,9 +87,12 @@ function Layout(props) {
 						sx={{ mr: 2, display: { sm: 'none' } }}>
 						<MenuIcon />
 					</IconButton>
-					<Typography variant='h6' noWrap component='div'>
+					<Typography variant='h6' noWrap component='div' sx={{ flexGrow: 1 }}>
 						Responsive drawer
 					</Typography>
+					<Button color='inherit' onClick={logoutHandler}>
+						Logout
+					</Button>
 				</Toolbar>
 			</AppBar>
 			<Box
