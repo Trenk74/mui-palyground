@@ -6,6 +6,9 @@ const initState = {
 	token: '',
 	firstName: '',
 	expiresIn: '',
+	authorities: [],
+	maxVehicle: 0,
+	typeUser: '',
 	isFetching: false,
 	isSuccess: false,
 	isError: false,
@@ -30,15 +33,12 @@ export const login = createAsyncThunk(
 				}),
 			});
 			let data = await response.json();
-			console.log(response);
-			console.log('response:', data);
-			console.log(data.accessToken);
+
 			if (response.status === 200) {
 				localStorage.setItem('token', data.accessToken);
 				let dateTime = (Date.now() + 3600000).toString();
-				console.log(dateTime);
 				localStorage.setItem('tokenExpiration', dateTime);
-				sessionStorage.setItem('isLoggedIn', true);
+				console.log('DATA - Login: ', data);
 				return data;
 			} else {
 				return thunkAPI.rejectWithValue(data);
@@ -64,10 +64,6 @@ const authSlice = createSlice({
 		logout: state => {
 			return initState;
 		},
-		lg: state => {
-			state.isLoggedIn = false;
-			return state;
-		},
 	},
 
 	extraReducers: {
@@ -76,6 +72,9 @@ const authSlice = createSlice({
 			state.token = payload.accessToken;
 			state.firstName = payload.firstName;
 			state.expiresIn = payload.exparation;
+			state.authorities = payload.authorities;
+			state.maxVehicle = payload.maxNumberVehicle;
+			state.typeUser = payload.typeUser;
 			state.isFetching = false;
 			state.isSuccess = true;
 			state.isLoggedIn = true;

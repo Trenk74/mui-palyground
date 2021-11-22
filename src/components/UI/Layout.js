@@ -40,7 +40,7 @@ function Layout(props) {
 
 	const logoutHandler = () => {
 		dispatch(authActions.logout());
-		sessionStorage.clear();
+		localStorage.clear();
 		navigate('/');
 	};
 

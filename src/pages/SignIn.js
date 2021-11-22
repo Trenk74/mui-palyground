@@ -12,6 +12,7 @@ import {
 	Box,
 	Typography,
 	Container,
+	CircularProgress,
 } from '@mui/material';
 import { Link as RLink } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -70,13 +71,17 @@ export default function SignIn() {
 					flexDirection: 'column',
 					alignItems: 'center',
 				}}>
-				<Avatar
-					sx={{
-						m: 1,
-						bgcolor: 'secondary.main',
-					}}>
-					<LockOutlinedIcon />
-				</Avatar>
+				{isFetching ? (
+					<CircularProgress />
+				) : (
+					<Avatar
+						sx={{
+							m: 1,
+							bgcolor: 'secondary.main',
+						}}>
+						<LockOutlinedIcon />
+					</Avatar>
+				)}
 				<Typography component='h1' variant='h5'>
 					Sign in
 				</Typography>

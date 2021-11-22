@@ -18,15 +18,13 @@ store.subscribe(
 );
 
 ReactDOM.render(
-	<React.StrictMode>
-		<Provider store={store}>
-			<ThemeProvider theme={theme}>
-				<BrowserRouter>
-					<App />
-					<ToastContainer />
-				</BrowserRouter>
-			</ThemeProvider>
-		</Provider>
-	</React.StrictMode>,
+	<Provider store={store}>
+		<ThemeProvider theme={theme}>
+			<BrowserRouter>
+				<App />
+				<ToastContainer />
+			</BrowserRouter>
+		</ThemeProvider>
+	</Provider>,
 	document.getElementById('root')
 );

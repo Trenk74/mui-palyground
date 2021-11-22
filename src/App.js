@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 
 function App() {
 	const isLoggedIn = useSelector(state => state.auth.isLoggedIn);
+	console.log(isLoggedIn);
 
 	return (
 		<Routes>
@@ -20,7 +21,12 @@ function App() {
 					)
 				}
 			/>
-			<Route path='/login' element={<SignIn />} />
+			<Route
+				path='/login'
+				element={
+					isLoggedIn ? <Navigate replace to='/app/garage' /> : <SignIn />
+				}
+			/>
 			<Route
 				path='app'
 				element={isLoggedIn ? <Layout /> : <Navigate to='/login' />}>
