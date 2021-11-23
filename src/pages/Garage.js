@@ -7,16 +7,27 @@ function Garage() {
 	const dispatch = useDispatch();
 	const { vehicles } = useSelector(garageSelector);
 
-	console.log('Garage vehicles: ', vehicles);
-
 	useEffect(() => {
 		dispatch(garageActions.clearState());
 		return () => {};
 	}, []);
 
+	vehicles.forEach(function (vehicle) {
+		console.log(vehicle);
+	});
+
 	return (
 		<Box>
 			<Typography>Garage</Typography>
+			{vehicles.map(vehicle => (
+				<Box key={vehicle.idVehicle}>
+					<Typography>{vehicle.idVehicle}</Typography>
+					<Typography>{vehicle.vehicleRegistration}</Typography>
+					<Typography>{vehicle.Model}</Typography>
+					<Typography>{vehicle.Maker}</Typography>
+					<Typography>{vehicle.vehicleVIN}</Typography>
+				</Box>
+			))}
 		</Box>
 	);
 }

@@ -20,8 +20,14 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 
 import { drowerItems } from './drowerItems';
 import { authActions } from '../../store/authSlice';
-import { garage, garageActions } from './../../store/garageSlice';
+import {
+	garage,
+	garageActions,
+	garageSelector,
+} from './../../store/garageSlice';
 import { authSelector } from './../../store/authSlice';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const drawerWidth = 240;
 
@@ -34,6 +40,7 @@ function Layout(props) {
 	const location = useLocation();
 
 	const { token, authorities } = useSelector(authSelector);
+	const { isError, errorMessage } = useSelector(garageSelector);
 
 	let singleAuth = '';
 
@@ -56,6 +63,15 @@ function Layout(props) {
 			dispatch(garageActions.clearState());
 		};
 	}, []);
+
+	useEffect(() => {
+		if (isError) {
+			toast.error(errorMessage);
+		}
+		return () => {
+			dispatch(garageActions.clearState());
+		};
+	}, [dispatch, errorMessage, isError]);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
