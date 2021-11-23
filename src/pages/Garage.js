@@ -1,42 +1,22 @@
 import React, { useEffect } from 'react';
-import { Typography, Box, CircularProgress } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-
-import { authSelector } from './../store/authSlice';
-
-import { garage, garageActions } from './../store/garageSlice';
-import { toast } from 'react-toastify';
+import { Typography, Box } from '@mui/material';
+import { useSelector, useDispatch } from 'react-redux';
+import { garageActions, garageSelector } from './../store/garageSlice';
 
 function Garage() {
 	const dispatch = useDispatch();
+	const { vehicles } = useSelector(garageSelector);
 
-	const { isFetching, isSuccess, isError, errorMessage, token } =
-		useSelector(authSelector);
+	console.log('Garage vehicles: ', vehicles);
 
 	useEffect(() => {
-		const data = {
-			token: token,
-			authorities: 'ROLE_ADMIN',
-		};
-		dispatch(garage(data));
+		dispatch(garageActions.clearState());
 		return () => {};
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	useEffect(() => {
-		if (isError) {
-			toast.error(errorMessage);
-			dispatch(garageActions.clearState());
-		}
-		if (isSuccess) {
-			dispatch(garageActions.clearState());
-		}
-	}, [isError, isSuccess]);
 
 	return (
 		<Box>
 			<Typography>Garage</Typography>
-			{isFetching ? <CircularProgress /> : null}
 		</Box>
 	);
 }

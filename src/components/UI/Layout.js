@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import {
 	AppBar,
 	Box,
@@ -14,14 +16,12 @@ import {
 	Toolbar,
 	Typography,
 } from '@mui/material';
-
 import { Menu as MenuIcon } from '@mui/icons-material';
 
 import { drowerItems } from './drowerItems';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Outlet } from 'react-router-dom';
 import { authActions } from '../../store/authSlice';
-import { useDispatch } from 'react-redux';
+import { garage, garageActions } from './../../store/garageSlice';
+import { authSelector } from './../../store/authSlice';
 
 const drawerWidth = 240;
 
@@ -30,9 +30,32 @@ function Layout(props) {
 	const [mobileOpen, setMobileOpen] = useState(false);
 
 	const dispatch = useDispatch();
-
 	const navigate = useNavigate();
 	const location = useLocation();
+
+	const { token, authorities } = useSelector(authSelector);
+
+	let singleAuth = '';
+
+	authorities.map(roleName => {
+		if (roleName.authority === 'ROLE_ADMIN') {
+			return (singleAuth = 'ROLE_ADMIN');
+		} else {
+			return (singleAuth = 'ROLE_DRIVER');
+		}
+	});
+
+	useEffect(() => {
+		const data = {
+			token: token,
+			authorities: singleAuth,
+		};
+		dispatch(garage(data));
+		dispatch(garageActions.clearState());
+		return () => {
+			dispatch(garageActions.clearState());
+		};
+	}, []);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -74,9 +97,11 @@ function Layout(props) {
 			<CssBaseline />
 			<AppBar
 				position='fixed'
+				color='inherit'
 				sx={{
 					width: { sm: `calc(100% - ${drawerWidth}px)` },
 					ml: { sm: `${drawerWidth}px` },
+					boxShadow: 1,
 				}}>
 				<Toolbar>
 					<IconButton

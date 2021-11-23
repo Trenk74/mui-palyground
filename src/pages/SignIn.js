@@ -48,18 +48,20 @@ export default function SignIn() {
 		return () => {
 			dispatch(authActions.clearState());
 		};
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	useEffect(() => {
 		if (isError) {
 			toast.error(errorMessage);
-			dispatch(authActions.clearState());
 		}
 		if (isSuccess) {
-			dispatch(authActions.clearState());
 			navigate('/app/garage');
 		}
-	}, [isError, isSuccess]);
+		return () => {
+			dispatch(authActions.clearState());
+		};
+	}, [dispatch, errorMessage, isError, isSuccess, navigate]);
 
 	return (
 		<Container component='main' maxWidth='xs'>

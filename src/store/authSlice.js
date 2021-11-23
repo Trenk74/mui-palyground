@@ -38,7 +38,6 @@ export const login = createAsyncThunk(
 				localStorage.setItem('token', data.accessToken);
 				let dateTime = (Date.now() + 3600000).toString();
 				localStorage.setItem('tokenExpiration', dateTime);
-				console.log('DATA - Login: ', data);
 				return data;
 			} else {
 				return thunkAPI.rejectWithValue(data);

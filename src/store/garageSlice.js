@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { getAllCompany, getAllDriver } from '../api/myCarApi';
 
 const initState = {
+	vehicles: [],
 	isError: false,
 	isSuccess: false,
 	isFetching: false,
@@ -11,6 +12,7 @@ const initState = {
 export const garage = createAsyncThunk(
 	'garage/getAll',
 	async ({ token, authorities }, thunkAPI) => {
+		console.log('fatch vozila');
 		let url = getAllCompany;
 		if (authorities === 'ROLE_ADMIN') {
 			url = getAllCompany;
@@ -26,7 +28,6 @@ export const garage = createAsyncThunk(
 				},
 			});
 			let data = await response.json();
-			console.log('Garage slice response data: ', data);
 			if (response.status === 200) {
 				return data;
 			} else {
@@ -42,7 +43,7 @@ const garageSlice = createSlice({
 	name: 'garage',
 	initialState: initState,
 	reducers: {
-		clearState: (state, action) => {
+		clearState: state => {
 			state.isError = false;
 			state.isSuccess = false;
 			state.isFetching = false;
@@ -53,6 +54,8 @@ const garageSlice = createSlice({
 
 	extraReducers: {
 		[garage.fulfilled]: (state, { payload }) => {
+			state.vehicles = payload;
+			state.isError = false;
 			state.isFetching = false;
 			state.isSuccess = true;
 			state.errorMessage = null;
@@ -60,10 +63,13 @@ const garageSlice = createSlice({
 		[garage.rejected]: (state, { payload }) => {
 			state.isFetching = false;
 			state.isError = true;
+			state.isSuccess = false;
 			state.errorMessage = payload.message;
 		},
 		[garage.pending]: state => {
 			state.isFetching = true;
+			state.isError = false;
+			state.isSuccess = false;
 		},
 	},
 });
