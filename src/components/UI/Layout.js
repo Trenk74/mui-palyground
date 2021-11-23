@@ -5,6 +5,7 @@ import {
 	AppBar,
 	Box,
 	Button,
+	CircularProgress,
 	CssBaseline,
 	Divider,
 	Drawer,
@@ -40,7 +41,8 @@ function Layout(props) {
 	const location = useLocation();
 
 	const { token, authorities } = useSelector(authSelector);
-	const { isError, errorMessage } = useSelector(garageSelector);
+	const { isError, isFetching, isSuccess, errorMessage } =
+		useSelector(garageSelector);
 
 	let singleAuth = '';
 
@@ -68,10 +70,14 @@ function Layout(props) {
 		if (isError) {
 			toast.error(errorMessage);
 		}
+		if (isSuccess) {
+			dispatch(garageActions.clearState());
+			navigate('/app/garage');
+		}
 		return () => {
 			dispatch(garageActions.clearState());
 		};
-	}, [dispatch, errorMessage, isError]);
+	}, [dispatch, errorMessage, isError, isSuccess, navigate]);
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
@@ -179,7 +185,7 @@ function Layout(props) {
 					width: { sm: `calc(100% - ${drawerWidth}px)` },
 				}}>
 				<Toolbar />
-				<Outlet />
+				{isFetching ? <CircularProgress /> : <Outlet />}
 			</Box>
 		</Box>
 	);

@@ -14,7 +14,7 @@ function App() {
 				path='/'
 				element={
 					isLoggedIn ? (
-						<Navigate replace to='/app/garage' />
+						<Navigate replace to='/app' />
 					) : (
 						<Navigate replace to='/login' />
 					)
@@ -22,9 +22,7 @@ function App() {
 			/>
 			<Route
 				path='/login'
-				element={
-					isLoggedIn ? <Navigate replace to='/app/garage' /> : <SignIn />
-				}
+				element={isLoggedIn ? <Navigate replace to='/app' /> : <SignIn />}
 			/>
 			<Route
 				path='app'

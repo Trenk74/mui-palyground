@@ -83,7 +83,9 @@ const authSlice = createSlice({
 			state.isFetching = false;
 			state.isError = true;
 			state.isLoggedIn = false;
-			state.errorMessage = payload.message;
+			if (!payload.message) {
+				state.errorMessage = payload.message;
+			}
 		},
 		[login.pending]: state => {
 			state.isFetching = true;

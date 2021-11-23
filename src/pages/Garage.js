@@ -1,33 +1,57 @@
-import React, { useEffect } from 'react';
-import { Typography, Box } from '@mui/material';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+	Typography,
+	Box,
+	FormControl,
+	InputLabel,
+	Select,
+	MenuItem,
+} from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { garageActions, garageSelector } from './../store/garageSlice';
 
 function Garage() {
-	const dispatch = useDispatch();
 	const { vehicles } = useSelector(garageSelector);
+	const dispatch = useDispatch();
+	const vehicleRef = useRef(vehicles);
+	const [idVehicle, setIdVehicle] = useState(9);
 
 	useEffect(() => {
 		dispatch(garageActions.clearState());
 		return () => {};
 	}, []);
 
-	vehicles.forEach(function (vehicle) {
-		console.log(vehicle);
-	});
+	console.log(idVehicle);
+
+	const selectedVehicleHandler = event => {
+		setIdVehicle(event.target.value);
+	};
 
 	return (
 		<Box>
+			<FormControl sx={{ m: 1, minWidth: '96%' }}>
+				<InputLabel id='select-vehicle-label'>Odaberi Vozilo</InputLabel>
+
+				<Select
+					labelId='select-vehicle-label'
+					id='select-vehicle'
+					value={idVehicle}
+					label='Odaberi Vozilo'
+					onChange={selectedVehicleHandler}>
+					{vehicleRef.current.map(vehicle => {
+						return (
+							<MenuItem key={vehicle.idVehicle} value={vehicle.idVehicle}>
+								{vehicle.vehicleRegistration +
+									' -- ' +
+									vehicle.vehicleMaker +
+									' ' +
+									vehicle.vehicleModel}
+							</MenuItem>
+						);
+					})}
+				</Select>
+			</FormControl>
 			<Typography>Garage</Typography>
-			{vehicles.map(vehicle => (
-				<Box key={vehicle.idVehicle}>
-					<Typography>{vehicle.idVehicle}</Typography>
-					<Typography>{vehicle.vehicleRegistration}</Typography>
-					<Typography>{vehicle.Model}</Typography>
-					<Typography>{vehicle.Maker}</Typography>
-					<Typography>{vehicle.vehicleVIN}</Typography>
-				</Box>
-			))}
 		</Box>
 	);
 }
